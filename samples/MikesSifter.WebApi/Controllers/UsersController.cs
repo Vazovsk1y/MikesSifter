@@ -15,7 +15,7 @@ public class UsersController(
     ApplicationDbContext dbContext) : ControllerBase
 {
     [HttpPost("full")]
-    public IActionResult Page(MikesSifterModel model)
+    public IActionResult Page(ApplicationSifterModel model)
     {
         var result = sifter.Apply(dbContext.Users.Include(e => e.Projects).Include(e => e.Passport), model);
         return Ok(result.Select(e => e.ToViewModel()).ToList());
