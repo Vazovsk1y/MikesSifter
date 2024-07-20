@@ -25,7 +25,11 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
         builder
             .Property(e => e.Projects)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperators.Contains, filterValue => u => u.Projects.Any(e => e.Id == Guid.Parse(filterValue)));
+            .HasCustomFilter(FilteringOperators.Contains, filterValue =>
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                return u => u.Projects.Any(e => e.Id == Guid.Parse(filterValue));
+            });
 
         builder
             .Property(e => e.Passport.Number)

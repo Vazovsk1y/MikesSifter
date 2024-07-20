@@ -9,14 +9,14 @@ namespace MikesSifter.Extensions;
 public static class Registrator
 {
     /// <summary>
-    /// Adds the specified <see cref="TSifter"/> implementation and its related services to the <see cref="IServiceCollection"/>.
+    /// Adds the specified sifter implementation and its related services to the <see cref="IServiceCollection"/>.
     /// </summary>
     /// <typeparam name="TSifter">The type of the sifter implementation that derives from <see cref="MikesSifter"/>.</typeparam>
     /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the services. The default is <see cref="ServiceLifetime.Scoped"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     /// <remarks>
-    /// This method registers the <see cref="TSifter"/> implementation and its related interfaces
+    /// This method registers the sifter implementation and its related interfaces
     /// (<see cref="IMikesSifter"/>, <see cref="IFilteringManager"/>, <see cref="ISortingManager"/>, <see cref="IPagingManager"/>)
     /// with the specified service lifetime.
     /// </remarks>
