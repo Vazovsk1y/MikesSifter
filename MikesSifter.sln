@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{596E1CCA-E3D1-4FED-BC20-2D2A3B78C641}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{3AB81929-2FA2-4F6D-8AAD-86AA1244E87A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A268726C-7FE4-403C-8553-1E9782FA81B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MikesSifter.WebApi", "samples\MikesSifter.WebApi\MikesSifter.WebApi.csproj", "{04709489-1E28-4136-ADA1-DD58BBC74F03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MikesSifter", "src\MikesSifter\MikesSifter.csproj", "{A7703217-2319-46DC-BCAE-9B604D3C9D67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MikesSifter.UnitTests", "tests\MikesSifter.UnitTests\MikesSifter.UnitTests.csproj", "{63D1E4EE-F47F-4DF3-8389-CD54206643C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{04709489-1E28-4136-ADA1-DD58BBC74F03} = {3AB81929-2FA2-4F6D-8AAD-86AA1244E87A}
+		{A7703217-2319-46DC-BCAE-9B604D3C9D67} = {596E1CCA-E3D1-4FED-BC20-2D2A3B78C641}
+		{63D1E4EE-F47F-4DF3-8389-CD54206643C5} = {A268726C-7FE4-403C-8553-1E9782FA81B9}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{04709489-1E28-4136-ADA1-DD58BBC74F03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04709489-1E28-4136-ADA1-DD58BBC74F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04709489-1E28-4136-ADA1-DD58BBC74F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04709489-1E28-4136-ADA1-DD58BBC74F03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7703217-2319-46DC-BCAE-9B604D3C9D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7703217-2319-46DC-BCAE-9B604D3C9D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7703217-2319-46DC-BCAE-9B604D3C9D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7703217-2319-46DC-BCAE-9B604D3C9D67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63D1E4EE-F47F-4DF3-8389-CD54206643C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63D1E4EE-F47F-4DF3-8389-CD54206643C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63D1E4EE-F47F-4DF3-8389-CD54206643C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63D1E4EE-F47F-4DF3-8389-CD54206643C5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
