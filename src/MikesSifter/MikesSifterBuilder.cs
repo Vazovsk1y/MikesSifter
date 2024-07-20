@@ -6,11 +6,14 @@ public class MikesSifterBuilder
 {
     private readonly Dictionary<Type, MikesSifterEntityBuilder> _builders = new();
 
-    public MikesSifterEntityBuilder<TEntity> Entity<TEntity>() where TEntity : class
+    public MikesSifterBuilder Entity<TEntity>(Action<MikesSifterEntityBuilder<TEntity>> entityConfiguration) where TEntity : class
     {
+        ArgumentNullException.ThrowIfNull(entityConfiguration);
+        
         var result = new MikesSifterEntityBuilder<TEntity>();
+        entityConfiguration.Invoke(result);
         _builders[typeof(TEntity)] = result;
-        return result;
+        return this;
     }
 
     public MikesSifterBuilder ApplyConfiguration<TConfiguration>() where TConfiguration : class, IMikesSifterEntityConfiguration, new()
