@@ -153,7 +153,7 @@ Add the application sifter to the services by calling the `AddSifter` extension 
 builder.Services.AddSifter<ApplicationSifter>();
 ```
 
-### 5. Usage for ASP.NET Core
+### 5. Let's use.
 
 Inject `IMikesSifter` whenever you want to use the sifter capabilities.
 
