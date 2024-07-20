@@ -2,9 +2,9 @@
 using MikesSifter.Paging;
 using MikesSifter.Sorting;
 
-namespace MikesSifter;
+namespace MikesSifter.WebApi.Infrastructure;
 
-public sealed class MikesSifterModel : IMikesSifterModel
+public sealed class ApplicationSifterModel : IMikesSifterModel
 {
     public FilteringOptions? FilteringOptions { get; init; }
     
