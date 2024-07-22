@@ -1,6 +1,6 @@
 # MikesSifter
 
-MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting, and paging capabilities for your IQueryable data sources in .NET.
+MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting, and paging capabilities in .NET applications.
 
 ## Installation
 
@@ -20,7 +20,7 @@ NuGet\Install-Package MikesSifter -Version *version_number*
 dotnet add package MikesSifter --version *version_number*
 ```
 
-## Usage
+## Usage for ASP.NET Core WebApi
 
 In this example, consider an app with a `User` entity that can have many projects. We'll use MikesSifter to add sorting, filtering, and pagination capabilities when retrieving all available users.
 
@@ -39,7 +39,7 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
             .EnableSorting();
 
         builder
-            .Property(e => e.Age)
+            .Property(e => e.Gender)
             .EnableSorting()
             .EnableFiltering();
 
@@ -87,7 +87,7 @@ builder.Entity<User>(e =>
         .EnableFiltering()
         .EnableSorting();
 
-    e.Property(i => i.Age)
+    e.Property(i => i.Gender)
         .EnableSorting()
         .EnableFiltering();
 
@@ -155,15 +155,19 @@ builder.Services.AddSifter<ApplicationSifter>();
 
 ### 5. Let's use.
 
-Inject `IMikesSifter` whenever you want to use the sifter capabilities.
+Inject `IMikesSifter` into controller to use the sifter capabilities.
 
 #### 5.1. Apply filtering/sorting/paging by calling the `Apply` method.
 
 ```csharp
 [HttpPost("full")]
-public IActionResult Page(ApplicationSifterModel model)
+public IActionResult Full(ApplicationSifterModel model)
 {
-    var result = sifter.Apply(dbContext.Users.Include(e => e.Projects).Include(e => e.Passport), model);
+    var result = sifter.Apply(dbContext
+        .Users
+        .Include(e => e.Projects)
+        .Include(e => e.Passport), model);
+    
     return Ok(result.Select(e => e.ToViewModel()).ToList());
 }
 ```
@@ -172,9 +176,13 @@ public IActionResult Page(ApplicationSifterModel model)
 
 ```csharp
 [HttpPost("filtering")]
-public IActionResult Filtering(FilteringOptions filteringOptions)
+public IActionResult OnlyFiltering(FilteringOptions filteringOptions)
 {
-    var result = sifter.ApplyFiltering(dbContext.Users.Include(e => e.Projects).Include(e => e.Passport), filteringOptions);
+    var result = sifter.ApplyFiltering(dbContext
+        .Users
+        .Include(e => e.Projects)
+        .Include(e => e.Passport), filteringOptions);
+    
     return Ok(result.Select(e => e.ToViewModel()).ToList());
 }
 ```
@@ -183,9 +191,13 @@ public IActionResult Filtering(FilteringOptions filteringOptions)
 
 ```csharp
 [HttpPost("sorting")]
-public IActionResult Sorting(SortingOptions sortingOptions)
+public IActionResult OnlySorting(SortingOptions sortingOptions)
 {
-    var result = sifter.ApplySorting(dbContext.Users.Include(e => e.Projects).Include(e => e.Passport), sortingOptions);
+    var result = sifter.ApplySorting(dbContext
+        .Users
+        .Include(e => e.Projects)
+        .Include(e => e.Passport), sortingOptions);
+    
     return Ok(result.Select(e => e.ToViewModel()).ToList());
 }
 ```
@@ -194,9 +206,13 @@ public IActionResult Sorting(SortingOptions sortingOptions)
 
 ```csharp
 [HttpPost("paging")]
-public IActionResult Paging(PagingOptions pagingOptions)
+public IActionResult OnlyPaging(PagingOptions pagingOptions)
 {
-    var result = sifter.ApplyPaging(dbContext.Users.Include(e => e.Projects).Include(e => e.Passport), pagingOptions);
+    var result = sifter.ApplyPaging(dbContext
+        .Users
+        .Include(e => e.Projects)
+        .Include(e => e.Passport), pagingOptions);
+    
     return Ok(result.Select(e => e.ToViewModel()).ToList());
 }
 ```

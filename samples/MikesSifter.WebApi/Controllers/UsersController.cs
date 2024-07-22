@@ -15,7 +15,7 @@ public class UsersController(
     ApplicationDbContext dbContext) : ControllerBase
 {
     [HttpPost("full")]
-    public IActionResult Page(ApplicationSifterModel model)
+    public IActionResult Full(ApplicationSifterModel model)
     {
         var result = sifter.Apply(dbContext
             .Users
@@ -26,7 +26,7 @@ public class UsersController(
     }
 
     [HttpPost("filtering")]
-    public IActionResult Filtering(FilteringOptions filteringOptions)
+    public IActionResult OnlyFiltering(FilteringOptions filteringOptions)
     {
         var result = sifter.ApplyFiltering(dbContext
             .Users
@@ -37,7 +37,7 @@ public class UsersController(
     }
 
     [HttpPost("sorting")]
-    public IActionResult Sorting(SortingOptions sortingOptions)
+    public IActionResult OnlySorting(SortingOptions sortingOptions)
     {
         var result = sifter.ApplySorting(dbContext
             .Users
@@ -48,7 +48,7 @@ public class UsersController(
     }
 
     [HttpPost("paging")]
-    public IActionResult Paging(PagingOptions pagingOptions)
+    public IActionResult OnlyPaging(PagingOptions pagingOptions)
     {
         var result = sifter.ApplyPaging(dbContext
             .Users
