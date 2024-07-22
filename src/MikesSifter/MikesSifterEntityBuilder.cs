@@ -16,7 +16,6 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
     /// <summary>
     /// Configures a property of the entity type using the specified property expression.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the entity containing the property to configure.</typeparam>
     /// <param name="expression">An expression that identifies the property to configure.</param>
     /// <returns>A <see cref="MikesSifterPropertyBuilder"/> to further configure the property.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="expression"/> is null.</exception>

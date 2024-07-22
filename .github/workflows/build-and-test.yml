@@ -8,6 +8,7 @@ on:
     
 env:
   BUILD_MODE: Release
+  SOLUTION_NAME : MikesSifter.sln
 
 jobs:
   build_and_test:
@@ -27,7 +28,7 @@ jobs:
         run: dotnet restore
 
       - name: Build.
-        run: dotnet build --no-restore --configuration ${{ env.BUILD_MODE }}
+        run: dotnet build ${{ env.SOLUNTION_NAME }} --configuration ${{ env.BUILD_MODE }} --no-restore
 
       - name: Test.
-        run: dotnet test --no-build --verbosity normal
+        run: dotnet test ${{ env.SOLUNTION_NAME }} --no-build --verbosity normal --configuration ${{ env.BUILD_MODE }}
