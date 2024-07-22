@@ -16,7 +16,7 @@ public static class Registrator
     /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the services. The default is <see cref="ServiceLifetime.Scoped"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
     /// <remarks>
-    /// This method registers the sifter implementation and its related interfaces
+    /// This method registers the sifter implementation and its related services
     /// (<see cref="IMikesSifter"/>, <see cref="IFilteringManager"/>, <see cref="ISortingManager"/>, <see cref="IPagingManager"/>)
     /// with the specified service lifetime.
     /// </remarks>

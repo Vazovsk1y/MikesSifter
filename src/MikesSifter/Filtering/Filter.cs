@@ -7,7 +7,7 @@ namespace MikesSifter.Filtering;
 /// </summary>
 /// <param name="PropertyAlias">The alias of the property to be filtered.</param>
 /// <param name="Operator">The operator used for filtering. Uses <see cref="FilteringOperators"/> enum.</param>
-/// <param name="Value">The value to filter the property by. Can be null.</param>
+/// <param name="Value">The value to filter the property by.</param>
 public record Filter(
     string PropertyAlias, 
     [property: JsonConverter(typeof(JsonStringEnumConverter))]

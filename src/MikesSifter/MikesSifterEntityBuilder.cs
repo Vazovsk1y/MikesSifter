@@ -13,6 +13,13 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
 {
     private readonly Dictionary<PropertyInfo, MikesSifterPropertyConfiguration> _configurations = new();
     
+    /// <summary>
+    /// Configures a property of the entity type using the specified property expression.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of the entity containing the property to configure.</typeparam>
+    /// <param name="expression">An expression that identifies the property to configure.</param>
+    /// <returns>A <see cref="MikesSifterPropertyBuilder"/> to further configure the property.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="expression"/> is null.</exception>
     public MikesSifterPropertyBuilder Property(Expression<Func<TEntity, object?>> expression)
     {
         ArgumentNullException.ThrowIfNull(expression);
@@ -40,6 +47,10 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
             UpdateConfigurations();
         }
 
+        /// <summary>
+        /// Enables filtering for the property.
+        /// </summary>
+        /// <returns>The current <see cref="MikesSifterPropertyBuilder"/> instance.</returns>
         public MikesSifterPropertyBuilder EnableFiltering()
         {
             _isFilterable = true;
@@ -48,6 +59,10 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
             return this;
         }
 
+        /// <summary>
+        /// Enables sorting for the property.
+        /// </summary>
+        /// <returns>The current <see cref="MikesSifterPropertyBuilder"/> instance.</returns>
         public MikesSifterPropertyBuilder EnableSorting()
         {
             _isSortable = true;
@@ -56,20 +71,33 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
             return this;
         }
 
+        /// <summary>
+        /// Sets an alias for the property.
+        /// </summary>
+        /// <param name="alias">The alias to set for the property.</param>
+        /// <returns>The current <see cref="MikesSifterPropertyBuilder"/> instance.</returns>
+        /// <exception cref="ArgumentException">Thrown when <paramref name="alias"/> is null or whitespace.</exception>
         public MikesSifterPropertyBuilder HasAlias(string alias)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(alias);
-            
+    
             _alias = alias;
             UpdateConfigurations();
 
             return this;
         }
 
+        /// <summary>
+        /// Adds a custom filter for the property with the specified filtering operator.
+        /// </summary>
+        /// <param name="operator">The filtering operator to apply.</param>
+        /// <param name="customFilter">The custom filter delegate to use for filtering.</param>
+        /// <returns>The current <see cref="MikesSifterPropertyBuilder"/> instance.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="customFilter"/> is null.</exception>
         public MikesSifterPropertyBuilder HasCustomFilter(FilteringOperators @operator, CustomFilterDelegate<TEntity> customFilter)
         {
             ArgumentNullException.ThrowIfNull(customFilter);
-        
+
             _customFilters[@operator] = ConvertToFunc(customFilter);
             UpdateConfigurations();
 
