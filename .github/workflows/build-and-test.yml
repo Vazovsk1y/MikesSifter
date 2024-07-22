@@ -5,20 +5,20 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
+env:
+  BUILD_MODE: Release
 
 jobs:
   build_and_test:
 
     runs-on: ubuntu-latest
-    
-    env: 
-      BUILD_CONFIG_MODE: Release
 
     steps:
       - name: Checkout.
         uses: actions/checkout@v3
         
-      - name: Setup .NET.
+      - name: Install .NET.
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
@@ -27,7 +27,7 @@ jobs:
         run: dotnet restore
 
       - name: Build.
-        run: dotnet build --no-restore --configuration $BUILD_CONFIG_MODE
+        run: dotnet build --no-restore --configuration ${{ env.BUILD_MODE }}
 
       - name: Test.
         run: dotnet test --no-build --verbosity normal
