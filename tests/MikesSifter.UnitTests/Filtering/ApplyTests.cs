@@ -10,7 +10,7 @@ namespace MikesSifter.UnitTests.Filtering;
 public class ApplyTests
 {
     private readonly IMikesSifter _sifter = new TestSifter();
-    public static readonly TheoryData<(FilteringOptions filteringOptions, IEnumerable<Entity> expected)> ValidFilteringOptions = FilteringData.ValidFilteringOptions;
+    public static readonly TheoryData<FilteringTestCase> TestCases = FilteringData.TestCases;
     
     [Fact]
     public void Apply_Should_Return_The_Same_Collection_WHEN_null_filtering_options_passed()
@@ -33,7 +33,8 @@ public class ApplyTests
         // arrange
         var expected = FilteringData.Entities.AsQueryable();
         var modelMock = Substitute.For<IMikesSifterModel>();
-        var filteringOptions = new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), []); modelMock.GetFilteringOptions().Returns(filteringOptions);
+        var filteringOptions = new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), []); 
+        modelMock.GetFilteringOptions().Returns(filteringOptions);
 
         // act
         var actual = _sifter.Apply(expected, modelMock);
@@ -48,8 +49,8 @@ public class ApplyTests
         // arrange
         var modelMock = Substitute.For<IMikesSifterModel>();
         var filteringOptions = new FilteringOptions(
-            Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Extensions.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
+            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
         
         modelMock.GetFilteringOptions().Returns(filteringOptions);
         
@@ -66,8 +67,8 @@ public class ApplyTests
         // arrange
         var modelMock = Substitute.For<IMikesSifterModel>();
         var filteringOptions = new FilteringOptions(
-            Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Extensions.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
+            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
         modelMock.GetFilteringOptions().Returns(filteringOptions);
         
         // act
@@ -78,17 +79,17 @@ public class ApplyTests
     }
     
     [Theory]
-    [MemberData(nameof(ValidFilteringOptions))]
-    public void Apply_Should_Return_Expected_Collection_WHEN_valid_filtering_options_passed((FilteringOptions filteringOptions, IEnumerable<Entity> expected) param)
+    [MemberData(nameof(TestCases))]
+    public void Apply_Should_Return_Expected(FilteringTestCase testCase)
     {
         // arrange
         var modelMock = Substitute.For<IMikesSifterModel>();
-        modelMock.GetFilteringOptions().Returns(param.filteringOptions);
+        modelMock.GetFilteringOptions().Returns(testCase.FilteringOptions);
         
         // act
         var actual = _sifter.Apply(FilteringData.Entities.AsQueryable(), modelMock);
 
         // assert
-        actual.Should().BeEquivalentTo(param.expected);
+        actual.Should().BeEquivalentTo(testCase.Expected);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using MikesSifter.Filtering;
+using MikesSifter.UnitTests.Infrastructure;
 using MikesSifter.UnitTests.Models;
 
 namespace MikesSifter.UnitTests.Filtering;
@@ -75,15 +76,15 @@ public static class FilteringData
         },
     };
     
-    public static readonly TheoryData<(FilteringOptions filteringOptions, IEnumerable<Entity> expected)> ValidFilteringOptions = new()
+    public static readonly TheoryData<FilteringTestCase> TestCases = new()
     {
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.Uint), FilteringOperators.Equal, "15") }), 
+        new FilteringTestCase  (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.Uint), FilteringOperators.Equal, "15") }), 
             new List<Entity> { Entities[0] }),
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.String), FilteringOperators.StartsWith, "A") }), 
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.String), FilteringOperators.StartsWith, "A") }), 
             new List<Entity> { Entities[1] }),
 
         // Multiple filters with AND logic
-        (new FilteringOptions(FilteringLogic.And, new List<Filter>
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.And, new List<Filter>
             {
                 new(nameof(Entity.Bool), FilteringOperators.Equal, "true"),
                 new(nameof(Entity.DateTimeOffset), FilteringOperators.LessThan, "2024-10-01T00:00:00Z")
@@ -91,7 +92,7 @@ public static class FilteringData
             new List<Entity> { Entities[0] }),
 
         // Multiple filters with OR logic
-        (new FilteringOptions(FilteringLogic.Or, new List<Filter>
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.Or, new List<Filter>
             {
                 new(nameof(Entity.Uint), FilteringOperators.Equal, "10"),
                 new(nameof(Entity.NullableInt32), FilteringOperators.GreaterThan, "50")
@@ -99,22 +100,22 @@ public static class FilteringData
             new List<Entity> { Entities[1], Entities[2] }),
 
         // Filters with complex type property
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
             { new("ComplexType_title", FilteringOperators.Equal, "BTitle1") }), 
             new List<Entity> { Entities[0] }),
 
         // Filters with related collection property
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
             { new("RelatedCollectionCount", FilteringOperators.GreaterThanOrEqual, "3") }), 
             new List<Entity> { Entities[0], Entities[1] }),
         
         // Custom filters
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
                 new(nameof(Entity.ComplexType), FilteringOperators.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1")))
             }), 
             new List<Entity> { Entities[0] }),
-        (new FilteringOptions(Extensions.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
                 new(nameof(Entity.RelatedCollection), FilteringOperators.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1")))
             }), 

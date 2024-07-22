@@ -10,7 +10,7 @@ namespace MikesSifter.UnitTests.Sorting;
 public class ApplyTests
 {
     private readonly IMikesSifter _sifter = new TestSifter();
-    public static TheoryData<(SortingOptions sortingOptions, IEnumerable<Entity> expected)> ValidSortingOptions = SortingData.ValidSortingOptions;
+    public static TheoryData<SortingTestCase> TestCases = SortingData.TestCases;
     
     [Fact]
     public void Apply_Should_Return_The_Same_Collection_WHEN_null_sorting_options_passed()
@@ -59,18 +59,18 @@ public class ApplyTests
     }
     
     [Theory]
-    [MemberData(nameof(ValidSortingOptions))]
-    public void Apply_Should_Return_Expected_Collection_WHEN_valid_sorting_options_passed((SortingOptions sortingOptions, IEnumerable<Entity> expected) param)
+    [MemberData(nameof(TestCases))]
+    public void Apply_Should_Return_Expected_Collection_WHEN_valid_sorting_options_passed(SortingTestCase testCase)
     {
         // arrange
         var modelMock = Substitute.For<IMikesSifterModel>();
-        modelMock.GetSortingOptions().Returns(param.sortingOptions);
+        modelMock.GetSortingOptions().Returns(testCase.SortingOptions);
         
         // act
         var actual = _sifter.Apply(SortingData.Entities.AsQueryable(), modelMock);
         
         // assert
-        actual.Should().BeEquivalentTo(param.expected);
+        actual.Should().BeEquivalentTo(testCase.Expected);
     }
 
     [Fact]
