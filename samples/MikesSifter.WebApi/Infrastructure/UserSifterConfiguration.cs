@@ -13,7 +13,7 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
             .EnableSorting();
 
         builder
-            .Property(e => e.Age)
+            .Property(e => e.Gender)
             .EnableSorting()
             .EnableFiltering();
 

@@ -5,8 +5,8 @@ public class User
     public required Guid Id { get; init; }
     
     public required string FullName { get; init; }
-    
-    public required int Age { get; init; }
+
+    public required bool Gender { get; init; }
     
     public required DateTime BirthDate { get; init; }
 
