@@ -46,6 +46,7 @@ public class EntitySifterConfiguration : IMikesSifterEntityConfiguration<Entity>
             .EnableFiltering()
             .HasCustomFilter(FilteringOperators.Equal, value =>
             {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Filter)}.{nameof(Filter.Value)}");
                 var parameter = JsonSerializer.Deserialize<ComplexType>(value);
                 ArgumentNullException.ThrowIfNull(parameter);
                 
@@ -74,6 +75,7 @@ public class EntitySifterConfiguration : IMikesSifterEntityConfiguration<Entity>
             .EnableFiltering()
             .HasCustomFilter(FilteringOperators.Contains, value =>
             {
+                ArgumentException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Filter)}.{nameof(Filter.Value)}");
                 var parameter = JsonSerializer.Deserialize<ComplexType>(value);
                 ArgumentNullException.ThrowIfNull(parameter);
                 

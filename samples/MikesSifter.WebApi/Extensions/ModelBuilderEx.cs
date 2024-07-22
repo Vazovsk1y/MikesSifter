@@ -6,16 +6,16 @@ using MikesSifter.WebApi.Models;
 
 namespace MikesSifter.WebApi.Extensions;
 
-public static class DatabaseSeeder
+public static class ModelBuilderEx
 {
     private static readonly Faker<User> UserFaker = new Faker<User>()
         .RuleFor(e => e.Id, e => Guid.NewGuid())
         .RuleFor(e => e.FullName, e => e.Name.FullName())
-        .RuleFor(e => e.Age, e => e.Random.Int(0, 100))
+        .RuleFor(e => e.Gender, e => e.Random.Bool())
         .RuleFor(e => e.BirthDate, e => e.Person.DateOfBirth.ToUniversalTime());
 
     private const int UsersCount = 200;
-    private static readonly (int from, int to) ProjectsRange = (5, 15);
+    private static readonly (int from, int to) UserProjectsRange = (5, 15);
 
     public static void Seed(this ModelBuilder modelBuilder)
     {
@@ -26,7 +26,7 @@ public static class DatabaseSeeder
         foreach (var user in users)
         {
             var faker = new Faker();
-            var userProjects = Enumerable.Range(0, Random.Shared.Next(ProjectsRange.from, ProjectsRange.to)).Select(e => new Project()
+            var userProjects = Enumerable.Range(0, Random.Shared.Next(UserProjectsRange.from, UserProjectsRange.to)).Select(e => new Project()
             {
                 Id = Guid.NewGuid(),
                 UserId = user.Id,

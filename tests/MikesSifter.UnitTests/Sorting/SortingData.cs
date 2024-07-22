@@ -59,86 +59,86 @@ public static class SortingData
         },
     };
 
-    public static readonly TheoryData<(SortingOptions sortingOptions, IEnumerable<Entity> expected)> ValidSortingOptions = new()
+    public static readonly TheoryData<SortingTestCase> TestCases = new()
     {
-        (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.Uint), true) }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
-            (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.Uint), false) }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.Uint), true) }), 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.Uint), false) }), 
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
             
-            // Nullable property type.
-            (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.NullableInt32), true) }), 
-                new List<Entity> { Entities[0], Entities[2], Entities[1] }),
-            (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.NullableInt32), false) }), 
-                new List<Entity> { Entities[1], Entities[2], Entities[0] }),
+        // Nullable property type.
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.NullableInt32), true) }), 
+            new List<Entity> { Entities[0], Entities[2], Entities[1] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, nameof(Entity.NullableInt32), false) }), 
+            new List<Entity> { Entities[1], Entities[2], Entities[0] }),
             
-            // By complex-type property with custom alias.
-            (new SortingOptions(new List<Sorter> { new(0, "ComplexType_title", true) }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
-            (new SortingOptions(new List<Sorter> { new(0, "ComplexType_title", false) }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+        // By complex-type property with custom alias.
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, "ComplexType_title", true) }), 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, "ComplexType_title", false) }), 
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
             
-            // By complex-type property without custom alias.
-            (new SortingOptions(new List<Sorter> { new(0, $"{nameof(ComplexType)}.{nameof(ComplexType.Value)}", true) }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
-            (new SortingOptions(new List<Sorter> { new(0, $"{nameof(ComplexType)}.{nameof(ComplexType.Value)}", false) }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        // By complex-type property without custom alias.
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, $"{nameof(ComplexType)}.{nameof(ComplexType.Value)}", true) }), 
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, $"{nameof(ComplexType)}.{nameof(ComplexType.Value)}", false) }), 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
             
-            // By related collection property with custom alias.
-            (new SortingOptions(new List<Sorter> { new(0, "RelatedCollectionCount", true) }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
-            (new SortingOptions(new List<Sorter> { new(0, "RelatedCollectionCount", false) }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        // By related collection property with custom alias.
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, "RelatedCollectionCount", true) }), 
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> { new(0, "RelatedCollectionCount", false) }), 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
             
-            // Multiple sorters (thenBy, thenByDescending).
-            (new SortingOptions(new List<Sorter> 
+        // Multiple sorters (thenBy, thenByDescending).
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.PropertyWithDisabledFiltering), true), 
                 new(1, nameof(Entity.Bool), true) 
             }), 
-                new List<Entity> { Entities[0], Entities[1], Entities[2] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[0], Entities[1], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.PropertyWithDisabledFiltering), true), 
                 new(1, nameof(Entity.Bool), false) 
             }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.PropertyWithDisabledFiltering), false), 
                 new(1, nameof(Entity.Bool), true) 
             }), 
-                new List<Entity> { Entities[2], Entities[1], Entities[0] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[2], Entities[1], Entities[0] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.PropertyWithDisabledFiltering), false), 
                 new(1, nameof(Entity.Bool), false) 
             }), 
-                new List<Entity> { Entities[2], Entities[1], Entities[0] }),
+            new List<Entity> { Entities[2], Entities[1], Entities[0] }),
 
-            (new SortingOptions(new List<Sorter> 
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.DateTimeOffset), true), 
                 new(1, nameof(Entity.String), true) 
             }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.DateTimeOffset), true), 
                 new(1, nameof(Entity.String), false) 
             }), 
-                new List<Entity> { Entities[1], Entities[0], Entities[2] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[1], Entities[0], Entities[2] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.DateTimeOffset), false), 
                 new(1, nameof(Entity.String), true) 
             }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
-            (new SortingOptions(new List<Sorter> 
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+        new SortingTestCase (new SortingOptions(new List<Sorter> 
             { 
                 new(0, nameof(Entity.DateTimeOffset), false), 
                 new(1, nameof(Entity.String), false) 
             }), 
-                new List<Entity> { Entities[2], Entities[0], Entities[1] }),
+            new List<Entity> { Entities[2], Entities[0], Entities[1] }),
     };
 }

@@ -1,6 +1,6 @@
-﻿namespace MikesSifter.UnitTests;
+﻿namespace MikesSifter.UnitTests.Infrastructure;
 
-public static class Extensions
+public static class Utils
 {
     public static T PickRandom<T>(params T[] values)
     {

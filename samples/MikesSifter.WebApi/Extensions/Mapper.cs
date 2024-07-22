@@ -12,7 +12,7 @@ public static class Mapper
             Id = user.Id,
             BirthDate = user.BirthDate,
             FullName = user.FullName,
-            Age = user.Age,
+            Gender = user.Gender,
             Passport = new PassportViewModel
             {
                 Series = user.Passport.Series,

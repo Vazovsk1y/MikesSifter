@@ -4,6 +4,21 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        
+        <PackageId>MikesSifter</PackageId>
+        <Title>MikesSifter</Title>
+        <Authors>Vazovsk1y</Authors>
+        <Description>Library for paging, sorting and filtering in .NET applications.</Description>
+        <RepositoryUrl>https://github.com/Vazovsk1y/MikesSifter</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Vazovsk1y/MikesSifter</PackageProjectUrl>
+        <RepositoryType>git</RepositoryType>
+        <IncludeSymbols>true</IncludeSymbols>
+        <PackageTags>Paging;Sorting;Filtering;ASP.NET;.NET;C#</PackageTags>
+
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <Version>1.0.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
