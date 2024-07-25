@@ -2,11 +2,10 @@
 
 public record UserViewModel
 {
-    public Guid Id { get; set; }
-    public DateTime BirthDate { get; set; }
-    public required string FullName { get; set; }
-    
-    public bool Gender { get; set; }
-    public required PassportViewModel Passport { get; set; }
-    public required List<ProjectViewModel> Projects { get; set; }
+    public  required Guid Id { get; init; }
+    public required DateTime BirthDate { get; init; }
+    public required string FullName { get; init; }
+    public required bool Gender { get; init; }
+    public required PassportViewModel Passport { get; init; }
+    public required List<ProjectViewModel> Projects { get; init; }
 }

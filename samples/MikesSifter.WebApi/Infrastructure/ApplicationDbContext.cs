@@ -30,6 +30,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 e.HasKey(i => i.Id);
             });
 
+        modelBuilder
+            .Entity<Passport>(e =>
+            {
+                e.HasKey(i => i.Id);
+            });
+
         modelBuilder.Seed();
     }
 }
