@@ -66,7 +66,7 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
 }
 ```
 
-Apply configurations by calling `ApplyConfiguration<T>`:
+Apply particular configuration by calling `ApplyConfiguration<T>`:
 
 ```csharp
 builder.ApplyConfiguration<UserSifterConfiguration>();
@@ -112,7 +112,7 @@ builder.Entity<User>(e =>
 
 ### 2. Implement `IMikesSifterModel`.
 
-In our example, we will use a custom model implementation as the POST body. However, you can implement your own using, for example, GET query parameters.
+In our example, we will use a custom model implementation as the POST body. However, you can implement your own using, for example, GET method with query parameters.
 
 ```csharp
 public sealed class ApplicationSifterModel : IMikesSifterModel
