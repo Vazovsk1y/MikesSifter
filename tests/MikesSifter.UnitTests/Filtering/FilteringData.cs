@@ -119,6 +119,20 @@ public static class FilteringData
             {
                 new(nameof(Entity.RelatedCollection), FilteringOperators.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1")))
             }), 
-            new List<Entity> { Entities[0] })
+            new List<Entity> { Entities[0] }),
+        
+        // Custom filters combines with built by sifter
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.And, new List<Filter>
+        {
+            new(nameof(Entity.ComplexType), FilteringOperators.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1"))),
+            new(nameof(Entity.Bool), FilteringOperators.Equal, "true")
+        }), 
+            new List<Entity> { Entities[0] }),
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.Or, new List<Filter>
+            {
+                new(nameof(Entity.RelatedCollection), FilteringOperators.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1"))),
+                new(nameof(Entity.String), FilteringOperators.NotEqual, "AEntity2")
+            }), 
+            new List<Entity> { Entities[0], Entities[2], Entities[3] })
     };
 }
