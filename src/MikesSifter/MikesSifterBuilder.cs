@@ -24,7 +24,7 @@ public class MikesSifterBuilder
     }
 
     /// <summary>
-    /// Applies the configuration from the specified configuration class <typeparamref name="TConfiguration"/>.
+    /// Applies the configuration from the specified configuration class.
     /// </summary>
     /// <typeparam name="TConfiguration">The type of the configuration class to apply.</typeparam>
     /// <returns>The current <see cref="MikesSifterBuilder"/> instance.</returns>
@@ -36,7 +36,7 @@ public class MikesSifterBuilder
         var builderType = typeof(MikesSifterEntityBuilder<>).MakeGenericType(entityType);
         var builder = Activator.CreateInstance(builderType);
 
-        var configureMethod = configurationType.GetMethod(nameof(IMikesSifterEntityConfiguration<object>.Configure), new[] { builderType });
+        var configureMethod = configurationType.GetMethod(nameof(IMikesSifterEntityConfiguration<object>.Configure), [ builderType ]);
     
         var configuration = new TConfiguration();
         configureMethod!.Invoke(configuration, [ builder ]);

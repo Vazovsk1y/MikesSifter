@@ -11,7 +11,7 @@ public static class Registrator
     /// <summary>
     /// Adds the specified sifter implementation and its related services to the <see cref="IServiceCollection"/>.
     /// </summary>
-    /// <typeparam name="TSifter">The type of the sifter implementation that derives from <see cref="MikesSifter"/>.</typeparam>
+    /// <typeparam name="TSifter">The type of the sifter implementation.</typeparam>
     /// <param name="serviceCollection">The <see cref="IServiceCollection"/> to add services to.</param>
     /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the services. The default is <see cref="ServiceLifetime.Scoped"/>.</param>
     /// <returns>The <see cref="IServiceCollection"/> so that additional calls can be chained.</returns>
