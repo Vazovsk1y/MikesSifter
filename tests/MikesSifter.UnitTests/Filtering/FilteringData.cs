@@ -121,7 +121,7 @@ public static class FilteringData
             }), 
             new List<Entity> { Entities[0] }),
         
-        // Custom filters combines with built by sifter
+        // Custom filters combined with built by sifter
         new FilteringTestCase (new FilteringOptions(FilteringLogic.And, new List<Filter>
         {
             new(nameof(Entity.ComplexType), FilteringOperators.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1"))),
