@@ -18,7 +18,7 @@ public abstract class MikesSifter : IMikesSifter
         Initialize();
     }
     
-    public IQueryable<TEntity> Apply<TEntity>(IQueryable<TEntity> source, IMikesSifterModel sifterModel)
+    public virtual IQueryable<TEntity> Apply<TEntity>(IQueryable<TEntity> source, IMikesSifterModel sifterModel)
     {
         var result = source;
         try
@@ -49,7 +49,7 @@ public abstract class MikesSifter : IMikesSifter
         }
     }
 
-    public IQueryable<TEntity> ApplyFiltering<TEntity>(IQueryable<TEntity> source, FilteringOptions? filteringOptions)
+    public virtual IQueryable<TEntity> ApplyFiltering<TEntity>(IQueryable<TEntity> source, FilteringOptions? filteringOptions)
     {
         try
         {
@@ -61,7 +61,7 @@ public abstract class MikesSifter : IMikesSifter
         }
     }
     
-    public IQueryable<TEntity> ApplySorting<TEntity>(IQueryable<TEntity> source, SortingOptions? sortingOptions)
+    public virtual IQueryable<TEntity> ApplySorting<TEntity>(IQueryable<TEntity> source, SortingOptions? sortingOptions)
     {
         try
         {
@@ -73,7 +73,7 @@ public abstract class MikesSifter : IMikesSifter
         }
     }
     
-    public IQueryable<TEntity> ApplyPaging<TEntity>(IQueryable<TEntity> source, PagingOptions? pagingOptions)
+    public virtual IQueryable<TEntity> ApplyPaging<TEntity>(IQueryable<TEntity> source, PagingOptions? pagingOptions)
     {
         try
         {
