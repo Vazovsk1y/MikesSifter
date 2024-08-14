@@ -13,13 +13,13 @@ public class MikesSifterBuilder
     /// <param name="entityConfiguration">An action to configure the entity.</param>
     /// <returns>The current <see cref="MikesSifterBuilder"/> instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="entityConfiguration"/> is null.</exception>
-    public MikesSifterBuilder Entity<TEntity>(Action<MikesSifterEntityBuilder<TEntity>> entityConfiguration) where TEntity : class
+    public MikesSifterBuilder Entity<TEntity>(Action<MikesSifterEntityBuilder<TEntity>> entityConfiguration)
     {
         ArgumentNullException.ThrowIfNull(entityConfiguration);
     
-        var result = new MikesSifterEntityBuilder<TEntity>();
-        entityConfiguration.Invoke(result);
-        _builders[typeof(TEntity)] = result;
+        var builder = new MikesSifterEntityBuilder<TEntity>();
+        entityConfiguration.Invoke(builder);
+        _builders[typeof(TEntity)] = builder;
         return this;
     }
 
@@ -74,10 +74,9 @@ public class MikesSifterBuilder
             applyConfigurationMethod.Invoke(this, null);
         }
     }
-
-    internal MikesSifterEntityBuilder? FindBuilder(Type entityType)
+    
+    internal IReadOnlyCollection<MikesSifterEntityConfiguration> Build()
     {
-        _ = _builders.TryGetValue(entityType, out var builder);
-        return builder;
+        return _builders.Select(e => e.Value.Build()).ToList();
     }
 }

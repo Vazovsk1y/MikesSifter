@@ -11,11 +11,13 @@ public abstract class MikesSifter : IMikesSifter
 {
     private const string FilteringParameterName = "x";
     private const string SortingParameterName = "e";
-    private readonly MikesSifterBuilder _builder = new();
+    private readonly IReadOnlyCollection<MikesSifterEntityConfiguration> _configurations;
 
     protected MikesSifter()
     {
-        Initialize();
+        var builder = new MikesSifterBuilder();
+        ConfigureInternal(builder);
+        _configurations = builder.Build();
     }
     
     public virtual IQueryable<TEntity> Apply<TEntity>(IQueryable<TEntity> source, IMikesSifterModel sifterModel)
@@ -99,10 +101,10 @@ public abstract class MikesSifter : IMikesSifter
     
     private IQueryable<T> ApplySortingInternal<T>(IQueryable<T> source, SortingOptions sortingOptions)
     {
-        var entityBuilder = _builder.FindBuilder(typeof(T));
-        if (entityBuilder is null)
+        var entityConfiguration = _configurations.FirstOrDefault(e => e.EntityType == typeof(T)); 
+        if (entityConfiguration is null)
         {
-            throw new EntityBuilderNotFoundException(typeof(T));
+            throw new EntityConfigurationNotFoundException(typeof(T));
         }
 
         var orderedSorters = sortingOptions
@@ -117,16 +119,17 @@ public abstract class MikesSifter : IMikesSifter
 
         enumerator.MoveNext();
         var currentSorter = enumerator.Current;
-        result = ApplySorter(result, currentSorter, false, entityBuilder);
+        result = ApplySorter(result, currentSorter, false, entityConfiguration);
 
         while (enumerator.MoveNext())
         {
             currentSorter = enumerator.Current;
-            result = ApplySorter(result, currentSorter, true, entityBuilder);
+            result = ApplySorter(result, currentSorter, true, entityConfiguration);
         }
 
         return result;
     }
+    
     private static IQueryable<T> ApplyPagingInternal<T>(IQueryable<T> source, PagingOptions pagingOptions)
     {
         if (pagingOptions.PageIndex <= 0)
@@ -143,6 +146,7 @@ public abstract class MikesSifter : IMikesSifter
             .Skip((pagingOptions.PageIndex - 1) * pagingOptions.PageSize)
             .Take(pagingOptions.PageSize);
     }
+    
     private Expression<Func<T, bool>> GetOrFilterExpression<T>(IReadOnlyCollection<Filter> filters)
     {
         var parameter = Expression.Parameter(typeof(T), FilteringParameterName);
@@ -177,13 +181,13 @@ public abstract class MikesSifter : IMikesSifter
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(filter.PropertyAlias);
 
-        var entityBuilder = _builder.FindBuilder(typeof(T));
-        if (entityBuilder is null)
+        var entityConfiguration = _configurations.FirstOrDefault(e => e.EntityType == typeof(T));
+        if (entityConfiguration is null)
         {
-            throw new EntityBuilderNotFoundException(typeof(T));
+            throw new EntityConfigurationNotFoundException(typeof(T));
         }
 
-        var propertyConfiguration = entityBuilder.FindConfiguration(filter.PropertyAlias);
+        var propertyConfiguration = entityConfiguration.PropertyConfigurations.FirstOrDefault(e => e.PropertyAlias.Equals(filter.PropertyAlias, StringComparison.Ordinal));
         if (propertyConfiguration is null)
         {
             throw new PropertyConfigurationNotFoundException(typeof(T), filter.PropertyAlias);
@@ -201,7 +205,7 @@ public abstract class MikesSifter : IMikesSifter
             return Expression.Invoke(customFilterExpression, parameter);
         }
 
-        var property = GetPropertyExpression(parameter, propertyConfiguration.PropertyFullName);
+        var property = GetPropertyExpression(parameter, propertyConfiguration.TargetPropertyPath);
         var convertedProperty = Expression.Convert(property, property.Type);
 
         object? convertedFilterValue;
@@ -241,11 +245,11 @@ public abstract class MikesSifter : IMikesSifter
         };
     }
 
-    private static IQueryable<T> ApplySorter<T>(IQueryable<T> source, Sorter sorter, bool thenBy, MikesSifterEntityBuilder entityBuilder)
+    private static IQueryable<T> ApplySorter<T>(IQueryable<T> source, Sorter sorter, bool thenBy, MikesSifterEntityConfiguration configuration)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sorter.PropertyAlias);
 
-        var propertyConfiguration = entityBuilder.FindConfiguration(sorter.PropertyAlias);
+        var propertyConfiguration = configuration.PropertyConfigurations.FirstOrDefault(e => e.PropertyAlias.Equals(sorter.PropertyAlias, StringComparison.Ordinal));
         if (propertyConfiguration is null)
         {
             throw new PropertyConfigurationNotFoundException(typeof(T), sorter.PropertyAlias);
@@ -257,7 +261,7 @@ public abstract class MikesSifter : IMikesSifter
         }
         
         var parameter = Expression.Parameter(typeof(T), SortingParameterName);
-        var property = GetPropertyExpression(parameter, propertyConfiguration.PropertyFullName);
+        var property = GetPropertyExpression(parameter, propertyConfiguration.TargetPropertyPath);
         var convertedProperty = Expression.Convert(property, typeof(object));
         var lambda = Expression.Lambda<Func<T, object>>(convertedProperty, parameter);
 
@@ -269,13 +273,13 @@ public abstract class MikesSifter : IMikesSifter
         return thenBy ? ((IOrderedQueryable<T>)source).ThenByDescending(lambda) : source.OrderByDescending(lambda);
     }
     
-    private static Expression GetPropertyExpression(Expression parameter, string fullPropertyName)
+    private static Expression GetPropertyExpression(Expression parameter, string targetPropertyPath)
     {
-        var names = fullPropertyName.Split('.');
+        var names = targetPropertyPath.Split('.');
         return names.Aggregate(parameter, Expression.PropertyOrField);
     }
-    
-    private void Initialize() => Configure(_builder);
+
+    private void ConfigureInternal(MikesSifterBuilder builder) => Configure(builder);
     
     protected abstract void Configure(MikesSifterBuilder builder);
 }
