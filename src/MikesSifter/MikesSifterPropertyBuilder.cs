@@ -1,20 +1,17 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 using MikesSifter.Filtering;
 
 namespace MikesSifter;
 
 public class MikesSifterPropertyBuilder<TEntity>
 {
-    private readonly Dictionary<FilteringOperators, Func<string?, Expression>> _customFilters = [];
     private readonly PropertyInfo _propertyInfo;
     private readonly string _targetPropertyPath;
 
+    private CustomFiltersBuilder<TEntity>? _customFiltersBuilder;
     private bool _isFilterable;
     private bool _isSortable;
     private string _alias;
-    
-    public delegate Expression<Func<TEntity, bool>> CustomFilterDelegate(string? filterValue);
     
     internal MikesSifterPropertyBuilder(PropertyInfo propertyInfo, string targetPropertyPath)
     {
@@ -63,15 +60,17 @@ public class MikesSifterPropertyBuilder<TEntity>
     /// <summary>
     /// Adds a custom filter for the property with the specified filtering operator.
     /// </summary>
-    /// <param name="operator">The filtering operator to apply.</param>
-    /// <param name="customFilter">The custom filter delegate to use for filtering.</param>
+    /// <param name="action">Action to configure custom filters.</param>
     /// <returns>The current <see cref="MikesSifterPropertyBuilder{TEntity}"/> instance.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when <paramref name="customFilter"/> is null.</exception>
-    public MikesSifterPropertyBuilder<TEntity> HasCustomFilter(FilteringOperators @operator, CustomFilterDelegate customFilter)
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="action"/> is null.</exception>
+    public MikesSifterPropertyBuilder<TEntity> HasCustomFilters(Action<CustomFiltersBuilder<TEntity>> action)
     {
-        ArgumentNullException.ThrowIfNull(customFilter);
+        ArgumentNullException.ThrowIfNull(action);
 
-        _customFilters[@operator] = customFilter.Invoke;
+        var builder = new CustomFiltersBuilder<TEntity>();
+        action.Invoke(builder);
+        _customFiltersBuilder = builder;
+        
         return this;
     }
 
@@ -81,7 +80,7 @@ public class MikesSifterPropertyBuilder<TEntity>
             _propertyInfo,
             _alias,
             _targetPropertyPath,
-            _customFilters,
+            _customFiltersBuilder?.Build() ?? [],
             _isFilterable,
             _isSortable);
     }

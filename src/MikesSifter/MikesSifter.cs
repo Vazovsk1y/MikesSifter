@@ -197,10 +197,15 @@ public abstract class MikesSifter : IMikesSifter
         {
             throw new FilteringDisabledException(typeof(T), filter.PropertyAlias);
         }
-        
-        if (propertyConfiguration.CustomFilters.TryGetValue(filter.Operator, out var customFilter))
+
+        var customFilter = propertyConfiguration.CustomFilters.FirstOrDefault(e => e.FilteringOperator == filter.Operator);
+        if (customFilter is not null)
         {
-            var customFilterExpression = customFilter.Invoke(filter.Value);
+            var customFilterExpression = customFilter.ObtainFilterExpression.Invoke(customFilter.FilterValueConverter is null ? 
+                filter.Value 
+                : 
+                customFilter.FilterValueConverter.Invoke(filter.Value));
+            
             ArgumentNullException.ThrowIfNull(customFilterExpression);
             return Expression.Invoke(customFilterExpression, parameter);
         }
