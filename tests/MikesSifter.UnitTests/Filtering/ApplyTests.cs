@@ -50,7 +50,7 @@ public class ApplyTests
         var modelMock = Substitute.For<IMikesSifterModel>();
         var filteringOptions = new FilteringOptions(
             Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Utils.PickRandom(Enum.GetValues<FilteringOperator>()), "no matter")]);
         
         modelMock.GetFilteringOptions().Returns(filteringOptions);
         
@@ -68,7 +68,7 @@ public class ApplyTests
         var modelMock = Substitute.For<IMikesSifterModel>();
         var filteringOptions = new FilteringOptions(
             Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Utils.PickRandom(Enum.GetValues<FilteringOperator>()), "no matter")]);
         modelMock.GetFilteringOptions().Returns(filteringOptions);
         
         // act

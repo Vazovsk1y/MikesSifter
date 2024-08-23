@@ -6,7 +6,7 @@ namespace MikesSifter;
 
 public class MikesSifterPropertyBuilder<TEntity>
 {
-    private readonly Dictionary<FilteringOperators, Func<string?, Expression>> _customFilters = [];
+    private readonly Dictionary<FilteringOperator, Func<string?, Expression>> _customFilters = [];
     private readonly PropertyInfo _propertyInfo;
     private readonly string _targetPropertyPath;
 
@@ -61,13 +61,13 @@ public class MikesSifterPropertyBuilder<TEntity>
     }
 
     /// <summary>
-    /// Adds a custom filter for the property with the specified filtering operator.
+    /// Adds a custom filter for the property with the specified filtering @operator.
     /// </summary>
-    /// <param name="operator">The filtering operator to apply.</param>
+    /// <param name="operator">The filtering @operator to apply.</param>
     /// <param name="customFilter">The custom filter delegate to use for filtering.</param>
     /// <returns>The current <see cref="MikesSifterPropertyBuilder{TEntity}"/> instance.</returns>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="customFilter"/> is null.</exception>
-    public MikesSifterPropertyBuilder<TEntity> HasCustomFilter(FilteringOperators @operator, CustomFilterDelegate customFilter)
+    public MikesSifterPropertyBuilder<TEntity> HasCustomFilter(FilteringOperator @operator, CustomFilterDelegate customFilter)
     {
         ArgumentNullException.ThrowIfNull(customFilter);
 

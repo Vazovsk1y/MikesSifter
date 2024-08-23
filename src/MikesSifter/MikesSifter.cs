@@ -227,21 +227,21 @@ public abstract class MikesSifter : IMikesSifter
 
         return filter.Operator switch
         {
-            FilteringOperators.Equal => Expression.Equal(convertedProperty, convertedConstant),
-            FilteringOperators.NotEqual => Expression.NotEqual(convertedProperty, convertedConstant),
-            FilteringOperators.LessThanOrEqual => Expression.LessThanOrEqual(convertedProperty, convertedConstant),
-            FilteringOperators.GreaterThanOrEqual => Expression.GreaterThanOrEqual(convertedProperty, convertedConstant),
-            FilteringOperators.LessThan => Expression.LessThan(convertedProperty, convertedConstant),
-            FilteringOperators.GreaterThan => Expression.GreaterThan(convertedProperty, convertedConstant),
-            FilteringOperators.Contains => Expression.Call(
+            FilteringOperator.Equal => Expression.Equal(convertedProperty, convertedConstant),
+            FilteringOperator.NotEqual => Expression.NotEqual(convertedProperty, convertedConstant),
+            FilteringOperator.LessThanOrEqual => Expression.LessThanOrEqual(convertedProperty, convertedConstant),
+            FilteringOperator.GreaterThanOrEqual => Expression.GreaterThanOrEqual(convertedProperty, convertedConstant),
+            FilteringOperator.LessThan => Expression.LessThan(convertedProperty, convertedConstant),
+            FilteringOperator.GreaterThan => Expression.GreaterThan(convertedProperty, convertedConstant),
+            FilteringOperator.Contains => Expression.Call(
                 convertedProperty,
                 typeof(string).GetMethod(nameof(string.Contains), [typeof(string)])!,
                 convertedConstant),
-            FilteringOperators.StartsWith => Expression.Call(
+            FilteringOperator.StartsWith => Expression.Call(
                 convertedProperty,
                 typeof(string).GetMethod(nameof(string.StartsWith), [typeof(string)])!,
                 convertedConstant),
-            _ => throw new KeyNotFoundException($"Unsupported filtering operator [ \"{filter.Operator}\" ].")
+            _ => throw new KeyNotFoundException($"Unsupported filtering @operator [ \"{filter.Operator}\" ].")
         };
     }
 

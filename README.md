@@ -51,7 +51,7 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
         builder
             .Property(e => e.Projects)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperators.Contains, filterValue =>
+            .HasCustomFilter(FilteringOperator.Contains, filterValue =>
             {
                 ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
                 return u => u.Projects.Any(e => e.Id == Guid.Parse(filterValue));
@@ -97,7 +97,7 @@ builder.Entity<User>(e =>
 
     e.Property(i => i.Projects)
         .EnableFiltering()
-        .HasCustomFilter(FilteringOperators.Contains, filterValue =>
+        .HasCustomFilter(FilteringOperator.Contains, filterValue =>
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
             return u => u.Projects.Any(pr => pr.Id == Guid.Parse(filterValue));

@@ -1,6 +1,6 @@
 namespace MikesSifter.Filtering;
 
-public enum FilteringOperators
+public enum FilteringOperator
 {
     Equal,
     NotEqual,

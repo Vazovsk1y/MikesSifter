@@ -8,6 +8,6 @@ internal record MikesSifterPropertyConfiguration(
     PropertyInfo PropertyInfo,
     string PropertyAlias, 
     string TargetPropertyPath, 
-    IReadOnlyDictionary<FilteringOperators, Func<string?, Expression>> CustomFilters,
+    IReadOnlyDictionary<FilteringOperator, Func<string?, Expression>> CustomFilters,
     bool IsFilterable,
     bool IsSortable);

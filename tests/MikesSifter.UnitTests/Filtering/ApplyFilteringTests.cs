@@ -44,7 +44,7 @@ public class ApplyFilteringTests
         // arrange
         var filteringOptions = new FilteringOptions(
             Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            [new Filter(nameof(Entity.PropertyWithDisabledFiltering), Utils.PickRandom(Enum.GetValues<FilteringOperator>()), "no matter")]);
         
         
         // act
@@ -60,7 +60,7 @@ public class ApplyFilteringTests
         // arrange
         var filteringOptions = new FilteringOptions(
             Utils.PickRandom(Enum.GetValues<FilteringLogic>()), 
-            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Utils.PickRandom(Enum.GetValues<FilteringOperators>()), "no matter")]);
+            [new Filter(nameof(Entity.PropertyWithNotDefinedConfiguration), Utils.PickRandom(Enum.GetValues<FilteringOperator>()), "no matter")]);
         
         // act
         void Action() => _sifter.ApplyFiltering(FilteringData.Entities.AsQueryable(), filteringOptions);
