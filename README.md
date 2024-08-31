@@ -1,6 +1,6 @@
 # MikesSifter
 
-MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting, and paging capabilities in .NET applications.
+MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting and paging capabilities in .NET applications.
 
 ## Installation
 
@@ -22,7 +22,7 @@ dotnet add package MikesSifter --version *version_number*
 
 ## Usage for ASP.NET Core WebApi
 
-In this example, consider an app with a `User` entity that can have many projects. We'll use MikesSifter to add sorting, filtering, and pagination capabilities when retrieving all available users.
+In this example, consider an app with a `User` entity that can have many projects. We'll use MikesSifter to add sorting, filtering and pagination capabilities when retrieving all available users.
 
 ### 1. Configure the properties you want to sort/filter in your models.
 
