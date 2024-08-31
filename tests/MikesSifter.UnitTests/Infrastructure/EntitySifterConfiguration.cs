@@ -24,7 +24,15 @@ public class EntitySifterConfiguration : IMikesSifterEntityConfiguration<Entity>
         builder
             .Property(e => e.String)
             .EnableFiltering()
-            .EnableSorting();
+            .EnableSorting()
+            .HasCustomFilters(e =>
+            {
+                e.WithFilter(FilteringOperator.GreaterThan, filterValue =>
+                {
+                    ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                    return i => i.String.Length > filterValue.Length;
+                });
+            });
 
         builder
             .Property(e => e.Bool)
@@ -44,13 +52,11 @@ public class EntitySifterConfiguration : IMikesSifterEntityConfiguration<Entity>
         builder
             .Property(e => e.ComplexType)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperator.Equal, value =>
+            .HasCustomFilters(e =>
             {
-                ArgumentException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Filter)}.{nameof(Filter.Value)}");
-                var parameter = JsonSerializer.Deserialize<ComplexType>(value);
-                ArgumentNullException.ThrowIfNull(parameter);
-                
-                return e => e.ComplexType == parameter;
+                e.WithFilter(FilteringOperator.Equal, Converter, filterValue => i => i.ComplexType == filterValue);
+
+                ComplexType? Converter(string? o) => string.IsNullOrWhiteSpace(o) ? null : JsonSerializer.Deserialize<ComplexType>(o);
             });
 
         builder
@@ -73,13 +79,13 @@ public class EntitySifterConfiguration : IMikesSifterEntityConfiguration<Entity>
         builder
             .Property(e => e.RelatedCollection)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperator.Contains, value =>
+            .HasCustomFilters(e =>
             {
-                ArgumentException.ThrowIfNullOrWhiteSpace(value, $"{nameof(Filter)}.{nameof(Filter.Value)}");
-                var parameter = JsonSerializer.Deserialize<ComplexType>(value);
-                ArgumentNullException.ThrowIfNull(parameter);
-                
-                return e => e.RelatedCollection.Contains(parameter);
+                e.WithFilter(FilteringOperator.Contains, new ComplexTypeFilterValueConverter(), filterValue =>
+                {
+                    ArgumentNullException.ThrowIfNull(filterValue);
+                    return i => i.RelatedCollection.Contains(filterValue);
+                });
             });
     }
 }

@@ -14,7 +14,7 @@ public static class FilteringData
             PropertyWithDisabledFiltering = 5,
             PropertyWithDisabledSorting = "Cool",
             Uint = 15,
-            String = "CEntity1",
+            String = "CEntity11",
             Bool = true,
             NullableInt32 = null,
             DateTimeOffset = DateTimeOffset.Parse("2024-09-22T13:00:00Z"),
@@ -109,15 +109,24 @@ public static class FilteringData
             { new("RelatedCollectionCount", FilteringOperator.GreaterThanOrEqual, "3") }), 
             new List<Entity> { Entities[0], Entities[1] }),
         
-        // Custom filters
+        // Custom filter with converter func
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
                 new(nameof(Entity.ComplexType), FilteringOperator.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1")))
             }), 
             new List<Entity> { Entities[0] }),
+        
+        // Custom filter with converter class
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
                 new(nameof(Entity.RelatedCollection), FilteringOperator.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1")))
+            }), 
+            new List<Entity> { Entities[0] }),
+        
+        // Custom filter without any converter
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
+            {
+                new(nameof(Entity.String), FilteringOperator.GreaterThan, "valuenlh")
             }), 
             new List<Entity> { Entities[0] }),
         

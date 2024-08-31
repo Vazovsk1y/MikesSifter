@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
+﻿using System.Reflection;
 using MikesSifter.Filtering;
 
 namespace MikesSifter;
@@ -8,6 +7,6 @@ internal record MikesSifterPropertyConfiguration(
     PropertyInfo PropertyInfo,
     string PropertyAlias, 
     string TargetPropertyPath, 
-    IReadOnlyDictionary<FilteringOperator, Func<string?, Expression>> CustomFilters,
+    IReadOnlyCollection<CustomFilter> CustomFilters,
     bool IsFilterable,
     bool IsSortable);

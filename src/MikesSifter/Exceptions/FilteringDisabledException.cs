@@ -1,6 +1,4 @@
-﻿using System.Reflection.Emit;
-
-namespace MikesSifter.Exceptions;
+﻿namespace MikesSifter.Exceptions;
 
 public class FilteringDisabledException : MikesSifterException
 {

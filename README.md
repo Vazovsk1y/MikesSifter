@@ -8,13 +8,13 @@ Minimum Requirements: .NET 8.0.x
 
 [Download from NuGet](https://www.nuget.org/packages/MikesSifter/)
 
-##### PowerShell
+##### Package Manager
 
 ```powershell
 NuGet\Install-Package MikesSifter -Version *version_number*
 ```
 
-##### Cmd
+##### .NET CLI
 
 ```cmd
 dotnet add package MikesSifter --version *version_number*
@@ -51,10 +51,13 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
         builder
             .Property(e => e.Projects)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperator.Contains, filterValue =>
+            .HasCustomFilters(e =>
             {
-                ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
-                return u => u.Projects.Any(e => e.Id == Guid.Parse(filterValue));
+                e.WithFilter(FilteringOperators.Contains, filterValue =>
+                {
+                    ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                    return u => u.Projects.Any(o => o.Id == Guid.Parse(filterValue));
+                });
             });
 
         builder
@@ -95,12 +98,15 @@ builder.Entity<User>(e =>
         .EnableFiltering()
         .EnableSorting();
 
-    e.Property(i => i.Projects)
+    e.Property(e => e.Projects)
         .EnableFiltering()
-        .HasCustomFilter(FilteringOperator.Contains, filterValue =>
+        .HasCustomFilters(e =>
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
-            return u => u.Projects.Any(pr => pr.Id == Guid.Parse(filterValue));
+            e.WithFilter(FilteringOperators.Contains, filterValue =>
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                return u => u.Projects.Any(o => o.Id == Guid.Parse(filterValue));
+            });
         });
 
     e.Property(i => i.Passport.Number)

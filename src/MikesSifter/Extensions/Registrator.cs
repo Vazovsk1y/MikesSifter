@@ -20,7 +20,8 @@ public static class Registrator
     /// (<see cref="IMikesSifter"/>, <see cref="IFilteringManager"/>, <see cref="ISortingManager"/>, <see cref="IPagingManager"/>)
     /// with the specified service lifetime.
     /// </remarks>
-    public static IServiceCollection AddSifter<TSifter>(this IServiceCollection serviceCollection, ServiceLifetime lifetime = ServiceLifetime.Scoped) where TSifter : MikesSifter
+    public static IServiceCollection AddSifter<TSifter>(this IServiceCollection serviceCollection, ServiceLifetime lifetime = ServiceLifetime.Scoped) 
+        where TSifter : MikesSifter
     {
         serviceCollection.TryAdd(new ServiceDescriptor(typeof(TSifter), typeof(TSifter), lifetime));
         serviceCollection.TryAdd(new ServiceDescriptor(typeof(IMikesSifter), provider => provider.GetRequiredService<TSifter>(), lifetime));
