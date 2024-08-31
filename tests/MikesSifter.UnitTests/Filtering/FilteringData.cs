@@ -14,7 +14,7 @@ public static class FilteringData
             PropertyWithDisabledFiltering = 5,
             PropertyWithDisabledSorting = "Cool",
             Uint = 15,
-            String = "CEntity1",
+            String = "CEntity11",
             Bool = true,
             NullableInt32 = null,
             DateTimeOffset = DateTimeOffset.Parse("2024-09-22T13:00:00Z"),
@@ -78,47 +78,70 @@ public static class FilteringData
     
     public static readonly TheoryData<FilteringTestCase> TestCases = new()
     {
-        new FilteringTestCase  (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.Uint), FilteringOperators.Equal, "15") }), 
+        new FilteringTestCase  (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.Uint), FilteringOperator.Equal, "15") }), 
             new List<Entity> { Entities[0] }),
-        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.String), FilteringOperators.StartsWith, "A") }), 
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> { new(nameof(Entity.String), FilteringOperator.StartsWith, "A") }), 
             new List<Entity> { Entities[1] }),
 
         // Multiple filters with AND logic
         new FilteringTestCase (new FilteringOptions(FilteringLogic.And, new List<Filter>
             {
-                new(nameof(Entity.Bool), FilteringOperators.Equal, "true"),
-                new(nameof(Entity.DateTimeOffset), FilteringOperators.LessThan, "2024-10-01T00:00:00Z")
+                new(nameof(Entity.Bool), FilteringOperator.Equal, "true"),
+                new(nameof(Entity.DateTimeOffset), FilteringOperator.LessThan, "2024-10-01T00:00:00Z")
             }), 
             new List<Entity> { Entities[0] }),
 
         // Multiple filters with OR logic
         new FilteringTestCase (new FilteringOptions(FilteringLogic.Or, new List<Filter>
             {
-                new(nameof(Entity.Uint), FilteringOperators.Equal, "10"),
-                new(nameof(Entity.NullableInt32), FilteringOperators.GreaterThan, "50")
+                new(nameof(Entity.Uint), FilteringOperator.Equal, "10"),
+                new(nameof(Entity.NullableInt32), FilteringOperator.GreaterThan, "50")
             }), 
             new List<Entity> { Entities[1], Entities[2] }),
 
         // Filters with complex type property
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
-            { new("ComplexType_title", FilteringOperators.Equal, "BTitle1") }), 
+            { new("ComplexType_title", FilteringOperator.Equal, "BTitle1") }), 
             new List<Entity> { Entities[0] }),
 
         // Filters with related collection property
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter> 
-            { new("RelatedCollectionCount", FilteringOperators.GreaterThanOrEqual, "3") }), 
+            { new("RelatedCollectionCount", FilteringOperator.GreaterThanOrEqual, "3") }), 
             new List<Entity> { Entities[0], Entities[1] }),
         
-        // Custom filters
+        // Custom filter with converter func
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
-                new(nameof(Entity.ComplexType), FilteringOperators.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1")))
+                new(nameof(Entity.ComplexType), FilteringOperator.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1")))
             }), 
             new List<Entity> { Entities[0] }),
+        
+        // Custom filter with converter class
         new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
             {
-                new(nameof(Entity.RelatedCollection), FilteringOperators.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1")))
+                new(nameof(Entity.RelatedCollection), FilteringOperator.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1")))
             }), 
-            new List<Entity> { Entities[0] })
+            new List<Entity> { Entities[0] }),
+        
+        // Custom filter without any converter
+        new FilteringTestCase (new FilteringOptions(Utils.PickRandom(Enum.GetValues<FilteringLogic>()), new List<Filter>
+            {
+                new(nameof(Entity.String), FilteringOperator.GreaterThan, "valuenlh")
+            }), 
+            new List<Entity> { Entities[0] }),
+        
+        // Custom filters combined with built by sifter
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.And, new List<Filter>
+        {
+            new(nameof(Entity.ComplexType), FilteringOperator.Equal, JsonSerializer.Serialize(new ComplexType("BTitle1", "BValue1"))),
+            new(nameof(Entity.Bool), FilteringOperator.Equal, "true")
+        }), 
+            new List<Entity> { Entities[0] }),
+        new FilteringTestCase (new FilteringOptions(FilteringLogic.Or, new List<Filter>
+            {
+                new(nameof(Entity.RelatedCollection), FilteringOperator.Contains, JsonSerializer.Serialize(new ComplexType("RelatedTitle1", "RelatedValue1"))),
+                new(nameof(Entity.String), FilteringOperator.NotEqual, "AEntity2")
+            }), 
+            new List<Entity> { Entities[0], Entities[2], Entities[3] })
     };
 }

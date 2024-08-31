@@ -1,6 +1,6 @@
 # MikesSifter
 
-MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting, and paging capabilities in .NET applications.
+MikesSifter is a versatile and extensible library designed to provide powerful filtering, sorting and paging capabilities in .NET applications.
 
 ## Installation
 
@@ -8,13 +8,13 @@ Minimum Requirements: .NET 8.0.x
 
 [Download from NuGet](https://www.nuget.org/packages/MikesSifter/)
 
-##### PowerShell
+##### Package Manager
 
 ```powershell
 NuGet\Install-Package MikesSifter -Version *version_number*
 ```
 
-##### Cmd
+##### .NET CLI
 
 ```cmd
 dotnet add package MikesSifter --version *version_number*
@@ -22,7 +22,7 @@ dotnet add package MikesSifter --version *version_number*
 
 ## Usage for ASP.NET Core WebApi
 
-In this example, consider an app with a `User` entity that can have many projects. We'll use MikesSifter to add sorting, filtering, and pagination capabilities when retrieving all available users.
+In this example, consider an app with a `User` entity that can have many projects. We'll use MikesSifter to add sorting, filtering and pagination capabilities when retrieving all available users.
 
 ### 1. Configure the properties you want to sort/filter in your models.
 
@@ -51,10 +51,13 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
         builder
             .Property(e => e.Projects)
             .EnableFiltering()
-            .HasCustomFilter(FilteringOperators.Contains, filterValue =>
+            .HasCustomFilters(e =>
             {
-                ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
-                return u => u.Projects.Any(e => e.Id == Guid.Parse(filterValue));
+                e.WithFilter(FilteringOperators.Contains, filterValue =>
+                {
+                    ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                    return u => u.Projects.Any(o => o.Id == Guid.Parse(filterValue));
+                });
             });
 
         builder
@@ -66,7 +69,7 @@ public class UserSifterConfiguration : IMikesSifterEntityConfiguration<User>
 }
 ```
 
-Apply configurations by calling `ApplyConfiguration<T>`:
+Apply particular configuration by calling `ApplyConfiguration<T>`:
 
 ```csharp
 builder.ApplyConfiguration<UserSifterConfiguration>();
@@ -95,12 +98,15 @@ builder.Entity<User>(e =>
         .EnableFiltering()
         .EnableSorting();
 
-    e.Property(i => i.Projects)
+    e.Property(e => e.Projects)
         .EnableFiltering()
-        .HasCustomFilter(FilteringOperators.Contains, filterValue =>
+        .HasCustomFilters(e =>
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
-            return u => u.Projects.Any(pr => pr.Id == Guid.Parse(filterValue));
+            e.WithFilter(FilteringOperators.Contains, filterValue =>
+            {
+                ArgumentException.ThrowIfNullOrWhiteSpace(filterValue);
+                return u => u.Projects.Any(o => o.Id == Guid.Parse(filterValue));
+            });
         });
 
     e.Property(i => i.Passport.Number)
@@ -112,7 +118,7 @@ builder.Entity<User>(e =>
 
 ### 2. Implement `IMikesSifterModel`.
 
-In our example, we will use a custom model implementation as the POST body. However, you can implement your own using, for example, GET query parameters.
+In our example, we will use a custom model implementation as the POST body. However, you can implement your own using, for example, GET method with query parameters.
 
 ```csharp
 public sealed class ApplicationSifterModel : IMikesSifterModel

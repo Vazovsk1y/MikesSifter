@@ -1,9 +1,7 @@
 ﻿name: Deploy to NuGet.
 
 on:
-  create:
-    branches:
-      - release/**
+  create
       
 env:
   BUILD_MODE: Release
@@ -15,6 +13,7 @@ jobs:
   deploy_to_nuget:
     
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/heads/release/')
     
     steps:
       - name: Checkout.

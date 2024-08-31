@@ -1,11 +1,12 @@
-﻿using System.Linq.Expressions;
+﻿using System.Reflection;
 using MikesSifter.Filtering;
 
 namespace MikesSifter;
 
 internal record MikesSifterPropertyConfiguration(
+    PropertyInfo PropertyInfo,
     string PropertyAlias, 
-    string PropertyFullName, 
-    Dictionary<FilteringOperators, Func<string?, Expression>> CustomFilters,
+    string TargetPropertyPath, 
+    IReadOnlyCollection<CustomFilter> CustomFilters,
     bool IsFilterable,
     bool IsSortable);
