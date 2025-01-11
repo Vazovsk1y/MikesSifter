@@ -20,7 +20,7 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <NoWarn>$(NoWarn);1591</NoWarn>
-        <Version>2.0.0</Version>
+        <Version>2.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
