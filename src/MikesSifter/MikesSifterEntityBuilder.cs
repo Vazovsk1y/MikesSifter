@@ -5,7 +5,7 @@ namespace MikesSifter;
 
 public abstract class MikesSifterEntityBuilder
 {
-    internal abstract MikesSifterEntityConfiguration Build();
+    internal abstract EntityConfiguration Build();
 }
 
 public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
@@ -28,9 +28,9 @@ public sealed class MikesSifterEntityBuilder<TEntity> : MikesSifterEntityBuilder
         return builder;
     }
     
-    internal override MikesSifterEntityConfiguration Build()
+    internal override EntityConfiguration Build()
     {
-        return new MikesSifterEntityConfiguration(typeof(TEntity), _builders.Select(e => e.Value.Build()).ToList());
+        return new EntityConfiguration(typeof(TEntity), _builders.Select(e => e.Value.Build()).ToList());
     }
     
     private static (string targetPropertyPath, PropertyInfo propertyInfo) GetPropertyDescription(Expression<Func<TEntity, object?>> expression)

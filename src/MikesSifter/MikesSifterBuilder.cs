@@ -75,7 +75,7 @@ public class MikesSifterBuilder
         }
     }
     
-    internal IReadOnlyCollection<MikesSifterEntityConfiguration> Build()
+    internal IReadOnlyCollection<EntityConfiguration> Build()
     {
         return _builders.Select(e => e.Value.Build()).ToList();
     }

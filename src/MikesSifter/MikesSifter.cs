@@ -11,7 +11,7 @@ public abstract class MikesSifter : IMikesSifter
 {
     private const string FilteringParameterName = "x";
     private const string SortingParameterName = "e";
-    private readonly IReadOnlyCollection<MikesSifterEntityConfiguration> _configurations;
+    private readonly IReadOnlyCollection<EntityConfiguration> _configurations;
 
     protected MikesSifter()
     {
@@ -250,7 +250,7 @@ public abstract class MikesSifter : IMikesSifter
         };
     }
 
-    private static IQueryable<T> ApplySorter<T>(IQueryable<T> source, Sorter sorter, bool thenBy, MikesSifterEntityConfiguration configuration)
+    private static IQueryable<T> ApplySorter<T>(IQueryable<T> source, Sorter sorter, bool thenBy, EntityConfiguration configuration)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(sorter.PropertyAlias);
 
