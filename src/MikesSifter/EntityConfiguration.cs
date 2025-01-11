@@ -3,7 +3,11 @@ using MikesSifter.Filtering;
 
 namespace MikesSifter;
 
-internal record MikesSifterPropertyConfiguration(
+internal record EntityConfiguration(
+    Type EntityType, 
+    IReadOnlyCollection<PropertyConfiguration> PropertyConfigurations);
+    
+internal record PropertyConfiguration(
     PropertyInfo PropertyInfo,
     string PropertyAlias, 
     string TargetPropertyPath, 

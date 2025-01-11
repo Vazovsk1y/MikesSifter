@@ -74,9 +74,9 @@ public class MikesSifterPropertyBuilder<TEntity>
         return this;
     }
 
-    internal MikesSifterPropertyConfiguration Build()
+    internal PropertyConfiguration Build()
     {
-        return new MikesSifterPropertyConfiguration(
+        return new PropertyConfiguration(
             _propertyInfo,
             _alias,
             _targetPropertyPath,

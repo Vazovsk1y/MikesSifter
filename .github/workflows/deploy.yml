@@ -1,8 +1,13 @@
-﻿name: Deploy to NuGet.
+﻿name: Deploy to NuGet and Release section.
 
 on:
-  create
-      
+  push: 
+    tags:
+      - "v*"
+
+permissions:
+  contents: write # For release creation.
+
 env:
   BUILD_MODE: Release
   PROJECT_PATH: 'src/MikesSifter/MikesSifter.csproj'
@@ -10,27 +15,23 @@ env:
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
         
 jobs: 
-  deploy_to_nuget:
-    
+  deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/heads/release/')
     
     steps:
       - name: Checkout.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: Get package version.
         run: |
+          Import-Module ./scripts/GetPackageVersion.psm1
           Write-Host "Github ref: $Env:GITHUB_REF"
-          $version = .\scripts\GetVersion.ps1 -RowContainingPackageVersion $Env:GITHUB_REF
+          $version = GetVersionFromGitHubRef -GitHubRef $Env:GITHUB_REF
+          
+          Write-Host "Extracted version: '$version'"
           
           if ($version -eq $null) {
             Write-Error "Package version not found."
-            exit 1
-          }
-          
-          if ($Env:GITHUB_REF -notlike "*$version") {
-            Write-Error "Invalid branch title format."
             exit 1
           }
           
@@ -38,7 +39,7 @@ jobs:
         shell: pwsh
         
       - name: Install .NET.
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
           
@@ -51,5 +52,10 @@ jobs:
       - name: Pack.
         run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration ${{ env.BUILD_MODE }} --include-symbols -p:PackageVersion=${{ env.PACKAGE_VERSION }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
-      - name: Push.
+      - name: Push to Nuget.
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }}
+        
+      - name: Create release.
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
